@@ -7,7 +7,7 @@
 # server leaves the port falsely open and everything after it fails.
 #
 # Configure by environment, with no credentials in this file:
-#   CUREWM_ROBOT_HOST     user@host of the control box        (required)
+#   CUREWM_ROBOT_HOST     user@host of the control box (NUC)  (required)
 #   CUREWM_ROBOT_PORT     zerorpc port                        (default 4242)
 #   CUREWM_DROID_ROOT     DROID checkout on the control box   (default ~/droid)
 #   GRIPPER_CLOSE_FORCE   gripper closing force in N          (default 50)

@@ -7,8 +7,9 @@ gripper telemetry with an operator veto.
 
 ## Requirements
 
-- A DROID installation on this workstation, and a control box running DROID's zerorpc
-  server, reachable over SSH with **key-based authentication**.
+- A DROID installation on this workstation, and a control box (the NUC, in DROID's
+  terminology) running DROID's zerorpc server, reachable over SSH with **key-based
+  authentication**.
 - Passwordless sudo on the control box for the two `pkill` lines in `restart_stack.sh`,
   e.g. in `/etc/sudoers.d/curewm`:
   ```

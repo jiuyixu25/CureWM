@@ -1,14 +1,30 @@
 <div align="center">
 
-# CureWM
+<h1>World Models Dream of Success</h1>
+<h3>Diagnosing and Repairing Failure Insensitivity in Robot World Models</h3>
 
-**Repairing failure insensitivity in robot world models with execution-verified counterfactual replay**
+<p>
+  Jiuyi Xu<sup>1</sup> &nbsp;&nbsp;
+  Xiao Hu<sup>2</sup> &nbsp;&nbsp;
+  Meida Chen<sup>3</sup> &nbsp;&nbsp;
+  Peng Gao<sup>4</sup> &nbsp;&nbsp;
+  Yang Ye<sup>2</sup> &nbsp;&nbsp;
+  Yangming Shi<sup>1</sup>
+</p>
 
-[![Paper](https://img.shields.io/badge/paper-arXiv-b31b1b.svg)](https://arxiv.org/abs/XXXX.XXXXX)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/)
+<p>
+  <sup>1</sup>Colorado School of Mines &nbsp;&nbsp;&nbsp;
+  <sup>2</sup>Northeastern University <br>
+  <sup>3</sup>Institute for Creative Technologies, University of Southern California &nbsp;&nbsp;&nbsp;
+  <sup>4</sup>North Carolina State University
+</p>
 
-<img src="docs/overview.png" width="100%" alt="CureWM overview">
+<p>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License: MIT"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-3776ab?style=flat-square" alt="Python 3.10+"></a>
+</p>
+
+<img src="docs/overview.png" width="96%" alt="Perturb a successful demonstration across a severity grid, verify every outcome by execution, and post-train on the verified failures and the surviving successes.">
 
 </div>
 
@@ -199,19 +215,6 @@ neither is any third-party source. In particular the upstream Cosmos-Policy expe
 config carries an NVIDIA proprietary notice, so
 [`cluster/experiment_config_additions.py`](cluster/experiment_config_additions.py) ships
 only the block we append to it, with instructions. See [`NOTICE`](NOTICE).
-
-## Citation
-
-```bibtex
-@article{xu2026curewm,
-  title   = {World Models Dream of Success: Diagnosing and Repairing Failure
-             Insensitivity in Robot World Models},
-  author  = {Xu, Jiuyi and Hu, Xiao and Chen, Meida and Gao, Peng and Ye, Yang
-             and Shi, Yangming},
-  journal = {arXiv preprint arXiv:XXXX.XXXXX},
-  year    = {2026}
-}
-```
 
 ## License
 
