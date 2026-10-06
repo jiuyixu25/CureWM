@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.env
+
+# Generated data and model artifacts: never commit these.
+data/
+train_output/
+model_ckpt/
+episodes/
+*.npz
+*.hdf5
+*.h5
+*.pt
+*.ckpt
+*.mp4
+*.png
+*.jpg
+
+# ...except the probe outputs the analysis scripts ship with, which are inputs, not results.
+!analysis/*.jsonl
+
+.DS_Store
+.ipynb_checkpoints/

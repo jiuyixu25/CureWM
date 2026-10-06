@@ -1,0 +1,8 @@
+# Hardware pipeline.  Also needs a DROID installation on this machine and a reachable
+# control box running the DROID zerorpc server (see real_robot/README.md).
+numpy>=1.24,<3
+opencv-python>=4.8
+scipy>=1.10
+pillow>=10.0
+requests>=2.31
+pyrealsense2>=2.54

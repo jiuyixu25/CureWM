@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "curewm"
+version = "0.1.0"
+description = "Verified counterfactual replay for repairing failure insensitivity in robot world models"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+dependencies = ["numpy>=1.24,<3"]
+
+[project.optional-dependencies]
+libero     = ["h5py>=3.8"]
+maniskill  = ["mani-skill>=3.0.1", "gymnasium>=0.29", "h5py>=3.8"]
+real-robot = ["opencv-python>=4.8", "scipy>=1.10", "pillow>=10.0", "requests>=2.31", "pyrealsense2>=2.54"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,7 @@
+# ManiSkill3 backend.
+# NOTE: mani-skill 3.0.1 pins mplib 0.1.1, whose prebuilt wheel segfaults when creating a
+# Planner under numpy 2.x.  Keep numpy below 2 in this environment.
+numpy>=1.24,<2
+mani-skill>=3.0.1
+gymnasium>=0.29
+h5py>=3.8

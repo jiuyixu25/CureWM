@@ -1,0 +1,2 @@
+# The scripts under analysis/ use the Python standard library only.
+# This file exists so the tiering is explicit; it intentionally lists nothing.

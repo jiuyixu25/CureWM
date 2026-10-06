@@ -1,0 +1,2 @@
+# The failure-data engine.  This is all `import curewm` needs.
+numpy>=1.24,<3
