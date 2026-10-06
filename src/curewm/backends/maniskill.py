@@ -2,7 +2,7 @@
 
 Conventions (see the header of perturbations.py):
 - A ManiSkill action is pd_ee_delta_pose, shape (7,), with gripper in [-1 closed, +1 open].
-- The engine's own convention is grip in [0 closed, 1 open]; the conversion happens only
+- The engine's own convention is grip in [0 closed, 1 open]. The conversion happens only
   at this file's boundary.
 - Contact is approximated by agent.is_grasping(target), which is all the phase split
   needs: whether the object is held or not.
@@ -21,7 +21,7 @@ import mani_skill.envs  # noqa: F401  registers the environments
 
 from curewm.perturbations import Trajectory
 
-# Attribute name of each task's grasp target on the env; register new tasks here
+# Attribute name of each task's grasp target on the env. Register new tasks here
 TASK_TARGET_ATTR = {
     "PickCube-v1": "cube",
     "StackCube-v1": "cubeA",
@@ -67,7 +67,7 @@ class ManiSkill3Backend:
             contacts.append(self._grasping())
             s = info.get("success")
             if s is not None and bool(_np(s).reshape(-1)[0]):
-                success = True  # latch on first success; for most tasks it is irreversible
+                success = True  # latch on first success. For most tasks it is irreversible
             if bool(_np(trunc).reshape(-1)[0]):
                 break
         return {

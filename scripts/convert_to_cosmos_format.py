@@ -8,7 +8,7 @@ Official layout, verified against the released data: <suite>_regen/<task_name>_d
   data/demo_i/dones        (T,)   uint8    last step only
 
 By default only counterfactual (perturbed) trajectories are written.  A failure gets
-all-zero rewards; a perturbed replay that happened to succeed gets rewards[-1]=1 from its
+all-zero rewards. A perturbed replay that happened to succeed gets rewards[-1]=1 from its
 verified outcome.  That is where the treatment data's value supervision comes from.
 """
 from __future__ import annotations

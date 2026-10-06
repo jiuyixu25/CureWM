@@ -1,4 +1,4 @@
-"""External-camera alignment check against a T1 reference frame — no robot, read-only.
+"""External-camera alignment check against a T1 reference frame. No robot, read-only.
 
 The external D415 was re-positioned for the cube sessions (cubes_camB, 09-11). Every
 cup episode recorded after that must come from the 08-31 pose, or the world model sees
@@ -79,7 +79,7 @@ def main():
     H, inl = homography(cv2.cvtColor(ref, cv2.COLOR_BGR2GRAY), cv2.cvtColor(live, cv2.COLOR_BGR2GRAY))
     print(f"[cam] external {serial}; reference {ref_path}")
     if H is None:
-        print(f"[cam] homography failed ({inl} matches) — scene too different; compare {out}/side.jpg by eye")
+        print(f"[cam] homography failed ({inl} matches), scene too different. Compare {out}/side.jpg by eye")
         return
     h, w = ref.shape[:2]
     c = np.float32([[[w / 2, h / 2]]])

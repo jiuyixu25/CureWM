@@ -19,7 +19,7 @@ gripper telemetry with an operator veto.
 
 ## Configuration
 
-Nothing is hardcoded; everything comes from the environment.
+Nothing is hardcoded. Everything comes from the environment.
 
 | Variable | Meaning | Default |
 |---|---|---|
@@ -55,14 +55,15 @@ the fastest way to check a change. `perturb.py --episode <dir> --family X` does 
 for a perturbation, on a recorded episode.
 
 `auto_collect.py` runs the multi-object (cube) variant, where the robot re-arranges the
-scene itself between episodes; `--confirm` asks before each episode and lets the operator
-discard one before it is written.
+scene itself between episodes. Passing `--confirm` asks before each episode and lets the
+operator discard one before it is written.
 
 ## Calibration
 
 `scripted_demo.py --calibrate` teaches the object spots and the plate position.
 `cam_check.py` compares the current external camera view against a stored reference frame
-and reports translation and scale residuals; `cam_align_live.py` does it interactively.
+and reports translation and scale residuals. `cam_align_live.py` does the same
+interactively.
 `point_plate.py` locates the plate by closing the gripper and probing downward for contact.
 
 Between sessions the camera and the plate drift. Re-align before collecting, and record the

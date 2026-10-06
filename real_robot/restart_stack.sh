@@ -37,13 +37,13 @@ for try in 1 2 3; do
   if echo "$OUT" | grep -q CLEAN_AND_SPAWNED; then CLEAN_OK=1; break; fi
   sleep 5
 done
-[ "$CLEAN_OK" = 1 ] || { echo "[stack] cleanup or spawn failed; is the control box reachable?"; exit 1; }
+[ "$CLEAN_OK" = 1 ] || { echo "[stack] cleanup or spawn failed. Is the control box reachable?"; exit 1; }
 
 echo "[stack] waiting for port $PORT ..."
 for i in $(seq 1 30); do
   if timeout 10 ssh -o ConnectTimeout=6 -o BatchMode=yes "$CUREWM_ROBOT_HOST" \
       "ss -tln | grep -q ':$PORT'" 2>/dev/null; then
-    echo "[stack] port $PORT up (gripper force ${FORCE} N) -- ready."
+    echo "[stack] port $PORT up (gripper force ${FORCE} N). Ready."
     echo "[stack] note: this server accepts exactly one launch_controller."
     exit 0
   fi

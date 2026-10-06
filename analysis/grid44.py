@@ -1,7 +1,7 @@
 """The 4x4 LIBERO grid: 4 suites x {optimism, dSF, within-family AUROC, false-alarm}
 x 3 arms, all from the fa probe files (which include surviving perturbed replays).
 
-Cluster bootstrap over source demonstrations, 20,000 resamples, seed 0 -- the same
+Cluster bootstrap over source demonstrations, 20,000 resamples, seed 0, the same
 protocol as the pinned scripts.  Pure stdlib so it runs on the login node.
 """
 import json, os, re, random
@@ -31,8 +31,8 @@ def demo(r):
     return "%s/%s" % (r.get("_shard", ""), m.group(1) if m else r["name"])
 
 def auroc(fails, survs):
-    """P(V(a-) ranks a failure below a survivor); ties 0.5.  Rank-based so this
-    stays linearithmic -- the pools run to a few thousand items."""
+    """P(V(a-) ranks a failure below a survivor). Ties 0.5.  Rank-based so this
+    stays linearithmic, and the pools run to a few thousand items."""
     if not fails or not survs:
         return None
     allv = sorted([(v, 1) for v in survs] + [(v, 0) for v in fails])
@@ -70,7 +70,7 @@ def metrics(rs):
     return d
 
 def paired_ci(a_rs, b_rs, fn):
-    """fn maps a record -> scalar; cluster = (shard, source demo)."""
+    """fn maps a record -> scalar. Cluster = (shard, source demo)."""
     A = {(r["_shard"], r["name"]): r for r in a_rs}
     B = {(r["_shard"], r["name"]): r for r in b_rs}
     keys = sorted(set(A) & set(B))

@@ -2,12 +2,12 @@
 
 Configuration is fixed in this file so the reported interval is reproducible by running it.
   inputs      probe_{ctrl,post}fa_{ho_A,ho_B,ho2_A,ho2_B}.jsonl  (survivor-inclusive probes)
-  score       value_fail_action; a stratum's AUROC is P(V survivor > V failure) with ties at 1/2
+  score       value_fail_action. A stratum's AUROC is P(V survivor > V failure) with ties at 1/2
   strata      (family, severity) pairs holding at least three failures and three survivors
-              in the observed data; this set is fixed once and reused in every resample
+              in the observed data. This set is fixed once and reused in every resample
   statistic   macro average over strata, CureWM minus control
   cluster     (shard, source demonstration), the key used by libero_arms_verdict.py
-  bootstrap   resample clusters with replacement; a resample is excluded when any fixed
+  bootstrap   resample clusters with replacement. A resample is excluded when any fixed
               stratum loses either outcome in it
   seed        0            fixed in advance, as in every other analysis here
   B           20000        attempted resamples

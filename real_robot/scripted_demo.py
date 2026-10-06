@@ -1,11 +1,11 @@
-"""CureWM-Real scripted demo collection — generated pick-and-place trajectories.
+"""CureWM-Real scripted demo collection. Generated pick-and-place trajectories.
 
 Replaces VR teleop for demo collection: smooth, deterministic, near-100%%-success
 trajectories executed at 15 Hz in absolute cartesian space, recorded in the
 standard CureWM episode format (same cameras, locks, phase structure). The
 perturbation/replay pipeline consumes these identically to teleoped demos.
 
-One interactive session does everything (single RobotEnv, single launch —
+One interactive session does everything (single RobotEnv, single launch,
 respects the one-shot zerorpc rule):
 
   1. Calibration (first run, or --recal): keyboard-jog the arm to teach spots.
@@ -14,10 +14,10 @@ respects the one-shot zerorpc rule):
        g            = save current position as a CUP spot (repeat for several)
        p            = save current position as the PLATE spot
        q            = finish calibration
-     Teach 4-6 cup spots spread over the table and one plate spot; put the
+     Teach 4-6 cup spots spread over the table and one plate spot, then put the
      gripper fingertips AT GRASP HEIGHT around an actually-placed cup.
   2. Collection: per episode the script names a cup spot, you place the cup
-     there, press Enter, the robot does the rest; afterwards Enter=success/
+     there, press Enter, the robot does the rest. Afterwards Enter=success/
      save, f=failure/discard, r=redo, q=quit.
 
 Run IN YOUR OWN TERMINAL (interactive):
@@ -76,7 +76,7 @@ def _seg(p0, p1, seconds, rng, jitter=0.0):
 
 
 def _smooth_noise(T, sigma, rng, k=9):
-    """Temporally smoothed gaussian noise (T,3) — human-tremor-like drift."""
+    """Temporally smoothed gaussian noise (T,3), human-tremor-like drift."""
     n = rng.normal(0, sigma, (T, 3))
     ker = np.ones(k) / k
     for c in range(3):
@@ -88,7 +88,7 @@ def gen_trajectory(cup, plate, rpy, rng, home_xyz=None, noise=1.0, speed=1.0):
     """Action stream (T,7) for one pick-and-place demo, with per-episode variety.
 
     cup/plate: xyz of grasp point and plate centre. rpy: fixed tool orientation.
-    home_xyz: episode start (robot home pose); trajectory begins there.
+    home_xyz: episode start (robot home pose). Trajectory begins there.
     """
     v = lambda lo, hi: rng.uniform(lo, hi)  # noqa: E731
     cup = np.asarray(cup, float).copy()
@@ -131,7 +131,7 @@ def gen_trajectory(cup, plate, rpy, rng, home_xyz=None, noise=1.0, speed=1.0):
         w[b[5]:b[7]] = 0.4                     # lowering and opening the gripper
         xyz = xyz + noise * w[:, None] * _smooth_noise(T, 0.004, rng)
         ang = noise * w[:, None] * _smooth_noise(T, np.deg2rad(1.5), rng)
-        rpy_stream[:, 1:3] += ang[:, 1:3] * 0.8   # pitch and yaw only; roll is left alone (+/-pi wrap)
+        rpy_stream[:, 1:3] += ang[:, 1:3] * 0.8   # pitch and yaw only. Roll is left alone (+/-pi wrap)
 
     acts = np.zeros((T, 7), dtype=np.float32)
     acts[:, :3] = xyz
@@ -205,7 +205,7 @@ def calibrate(env, start_xyz, rpy, out_file):
                 break
             print("\n[cal] not enough saved yet (need at least one cup spot plus the plate). Press q again to abandon, any other key to keep calibrating")
             if _getch() in ("q", "\x03"):
-                raise SystemExit("[cal] aborted — rerun with --recal")
+                raise SystemExit("[cal] aborted, rerun with --recal")
     data = {"spots": spots, "plate": plate, "rpy": list(map(float, rpy)),
             "saved_at": time.strftime("%Y-%m-%d %H:%M:%S")}
     if retrieve is not None:
@@ -247,7 +247,7 @@ def _record_tick(env, serials, buf, action, moving):
 
 def run_episode(env, serials, locks, acts, out_dir, meta, tail_cap_s=60):
     """Stream the trajectory, then KEEP RECORDING (arm holding still) until the
-    operator answers the outcome prompt — the recording window is Enter-to-verdict,
+    operator answers the outcome prompt, so the recording window is Enter-to-verdict,
     and the settled tail doubles as the ground-truth ending for the probes."""
     buf = EpisodeBuffer(out_dir=out_dir, meta=meta)
     period = 1.0 / CONTROL_HZ
@@ -330,7 +330,7 @@ def main():
     print("[init] restarting the control stack (about 20 s)...")
     rc = subprocess.run(["bash", str(Path(__file__).parent / "restart_stack.sh")]).returncode
     if rc != 0:
-        raise SystemExit("[init] restart_stack failed -- check the control-box connection and retry")
+        raise SystemExit("[init] restart_stack failed. Check the control-box connection and retry")
 
     from droid.robot_env import RobotEnv
 
@@ -385,16 +385,16 @@ def main():
                 place = "  ".join(f"{c} -> spot {layout[c]+1}" for c in objects)
                 print(f"\n[obj] layout: {place}   |   target for this episode = {target_color}")
             n_here = saved % args.per_spot + 1
-            print(f"\n=== {split}/{args.task_id} {saved+1}/{args.num} — "
+            print(f"\n=== {split}/{args.task_id} {saved+1}/{args.num}: "
                   f"CUP on spot {k+1}/{len(spots)} ({np.round(spots[k][:2],3).tolist()}) "
                   f"[episode {n_here}/{args.per_spot}] ===")
             hovered = False
             if not args.no_hover:
                 # Show the operator where the spot is: open gripper hovers over the taught grasp
-                # point; the cup goes directly under the fingertips.  Not recorded.
+                # point. The cup goes directly under the fingertips.  Not recorded.
                 _goto(env, [spots[k][0], spots[k][1], spots[k][2] + args.hover_dz], rpy, seconds=3.0)
                 hovered = True
-                print(f"    the gripper is hovering {100*args.hover_dz:.0f} cm above cup spot {k+1} -- place the cup directly under the fingertips")
+                print(f"    the gripper is hovering {100*args.hover_dz:.0f} cm above cup spot {k+1}. Place the cup directly under the fingertips")
             ans = input("    <Enter>=go   s=next spot   q=quit : ").strip()
             if hovered:
                 env._robot.update_joints(env.reset_joints, velocity=False, blocking=True)   # back home before recording

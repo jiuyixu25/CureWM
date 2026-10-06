@@ -1,4 +1,4 @@
-"""CureWM-Real perturbation families — the hardware mirror of
+"""CureWM-Real perturbation families, the hardware mirror of
 curewm.perturbations, operating on DROID absolute-action
 streams [x, y, z, roll, pitch, yaw, gripper(0=open,1=closed)].
 
@@ -47,7 +47,7 @@ class SkipEpisode(Exception):
 
 def _euler_to_R(rpy):
     # droid.misc.transformations uses scipy xyz-extrinsic euler throughout
-    # (quat_to_euler == R.from_quat(...).as_euler("xyz")); match it.
+    # (quat_to_euler == R.from_quat(...).as_euler("xyz")). Match it.
     return R.from_euler("xyz", rpy)
 
 
@@ -79,7 +79,7 @@ def premature_release(actions, ph, severity, rng):
 
 
 def carry_slip(actions, ph, severity, rng):
-    """Contiguous open window centred on the carry midpoint; then restore."""
+    """Contiguous open window centred on the carry midpoint. Then restore."""
     n = SLIP_FRAMES[min(SLIP_FRAMES, key=lambda k: abs(k - severity))]
     carry_len = ph["t_release"] - ph["carry_start"]
     if carry_len < n + 4:
@@ -118,12 +118,12 @@ def wrong_target(actions, ph, severity, rng, ctx=None):
     """Semantic family: re-aim the reach at a distractor object, then converge
     back onto the demo path during the lift so carry and place are unchanged.
 
-    Execution stays clean — smooth trajectory, firm grasp, object delivered to
-    the plate — and the task fails only because the wrong object was taken.
+    Execution stays clean, with a smooth trajectory, a firm grasp and the object
+    delivered to the plate. The task fails only because the wrong object was taken.
     Unlike the mechanical families this leaves no kinematic cue of failure, so
     a prediction that still shows the target object arriving is evidence that
     the model is not following the action at all. Severity selects the
-    distractor (<=0.8 nearest, else farthest); see wrong_target_ctx.
+    distractor (<=0.8 nearest, else farthest). See wrong_target_ctx.
     """
     if ctx is None or "delta_m" not in ctx:
         raise SkipEpisode("wrong_target needs a scene context (delta_m)")
@@ -168,8 +168,7 @@ def wrong_target(actions, ph, severity, rng, ctx=None):
 def wrong_target_ctx_xy(cubes, target_color: str, severity: float, z=None) -> dict:
     """Context from recorded object positions (no taught-spot table needed).
 
-    `cubes` is [{"color": str, "xy": [x, y]}, ...] as logged by the collector;
-    severity <= 0.8 picks the nearest distractor, otherwise the farthest.
+    `cubes` is [{"color": str, "xy": [x, y]}, ...] as logged by the collector. Severity <= 0.8 picks the nearest distractor, otherwise the farthest.
     """
     by = {c["color"]: np.asarray(c["xy"], dtype=float) for c in cubes}
     if target_color not in by:

@@ -7,7 +7,7 @@ severity in [0, 1], a phase annotator that decides where each family may act, an
 labels the outcome with the task's own success predicate.  A perturbation is never
 assumed to fail.
 
-Simulator bindings are in `curewm.backends`; each only has to satisfy the `SimBackend`
+Simulator bindings are in `curewm.backends`. Each only has to satisfy the `SimBackend`
 protocol declared in `curewm.perturbations`.
 """
 

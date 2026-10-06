@@ -5,7 +5,7 @@ Conventions (mirror scripts/tests/collect_lerobot_dataset.py):
   action  float32 (7,) = absolute target [x, y, z, roll, pitch, yaw, gripper]
   state   float32 (7,) = measured        [x, y, z, roll, pitch, yaw, gripper]
   gripper: 0 = open, 1 = closed (recorded as tap-toggle *intent*, bimodal)
-  15 Hz control loop; wrist cam = droid.misc.parameters.hand_camera_id.
+  15 Hz control loop. Wrist cam = droid.misc.parameters.hand_camera_id.
 
 Episode directory layout (one dir per episode):
   meta.json     kind/task/family/severity/... (see save_episode)
@@ -35,7 +35,7 @@ LOCK_FILE = DATA_ROOT / "camera_lock.json"
 SESSION_LOG = DATA_ROOT / "session_log.jsonl"
 
 FAMILIES = ("insufficient_grip", "premature_release", "carry_slip", "wrist_tilt")
-SEMANTIC_FAMILIES = ("wrong_target",)      # target selection; needs a multi-object scene
+SEMANTIC_FAMILIES = ("wrong_target",)      # target selection. Needs a multi-object scene
 ALL_FAMILIES = FAMILIES + SEMANTIC_FAMILIES
 SEVERITIES = (0.6, 0.8, 1.0)
 MT_SEVERITIES = (0.6, 1.0)                 # wrong_target: near / far distractor
@@ -190,7 +190,7 @@ def lock_cameras(env, warmup_s: float = 3.0, lock_file: Path = LOCK_FILE) -> dic
 
 
 def configure_cameras(env):
-    """Image-only trajectory mode on both D415s; returns {'wrist': serial, 'external': serial}."""
+    """Image-only trajectory mode on both D415s. Returns {'wrist': serial, 'external': serial}."""
     from droid.misc.parameters import hand_camera_id
 
     cam_dict = env.camera_reader.camera_dict
@@ -213,7 +213,7 @@ def configure_cameras(env):
 
 
 def grab_views(camera_obs, serials) -> tuple[np.ndarray | None, np.ndarray | None]:
-    """(wrist_bgr, ext_bgr) from env.read_cameras()[0] / get_observation(); None on drop."""
+    """(wrist_bgr, ext_bgr) from env.read_cameras()[0] / get_observation(). None on drop."""
     imgs = camera_obs.get("image", {})
     return imgs.get(serials["wrist"] + "_left"), imgs.get(serials["external"] + "_left")
 
@@ -222,7 +222,7 @@ def recover_camera(env, serial, locks: dict | None = None):
     """Hot-restart one camera pipeline in place and re-apply its lock.
 
     Used by the recorder when a camera stops delivering frames (persistent
-    wait_for_frames timeouts) — root cause unclear (single-process dual-stream
+    wait_for_frames timeouts). Root cause unclear (single-process dual-stream
     stall not reproducible standalone), so we heal instead of dying.
     """
     import pyrealsense2 as rs
@@ -248,7 +248,7 @@ def recover_camera(env, serial, locks: dict | None = None):
 # --------------------------------------------------------------------------
 # Phase annotation (real-robot mirror of failure_perturbations.annotate_phases)
 # --------------------------------------------------------------------------
-# Sim used simulator contacts for grasp settle; on hardware we use the demo
+# Sim used simulator contacts for grasp settle. On hardware we use the demo
 # SOP ("close, hold ~1 s") as a fixed settle window instead. Deterministic,
 # recorded in meta, and validated by the monotonicity gate like everything else.
 
@@ -282,8 +282,8 @@ class SafetyEnvelope:
     """Workspace box auto-derived from the source demo, plus per-step jump guard.
 
     The mechanical families never move xyz off the demo path (wrist_tilt is
-    orientation-only), so violations indicate a bug — clamp, count, and report.
-    `wrong_target` re-aims the reach at another object by design; pass the
+    orientation-only), so violations indicate a bug, so clamp, count, and report.
+    `wrong_target` re-aims the reach at another object by design. Pass the
     perturbed action stream as `extra_xyz` so the box is the union of the two
     paths (the per-step jump guard still catches runtime blow-ups).
     """

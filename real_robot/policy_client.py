@@ -52,7 +52,7 @@ def build_envelope(demo_root: Path, pattern: str = "pickup_demos_*") -> SafetyEn
 
 def cube_colour_in_gripper(wrist_bgr: np.ndarray) -> str:
     """Dominant saturated colour in the gripper region of the wrist view (lower-centre of the frame).
-    The wooden table (hue ~10-20) is excluded from red by the hue bound; returns 'unknown' when no cube dominates."""
+    The wooden table (hue ~10-20) is excluded from red by the hue bound. Returns 'unknown' when no cube dominates."""
     import cv2
     h, w = wrist_bgr.shape[:2]
     roi = wrist_bgr[int(0.35 * h):, int(0.25 * w):int(0.95 * w)]

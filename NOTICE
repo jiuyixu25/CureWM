@@ -3,15 +3,15 @@ This repository contains only code written by the authors of CureWM.
 It is designed to be used alongside several third-party projects, none of which
 are redistributed here. Obtain each from its own source, under its own license:
 
-  Cosmos-Policy / Cosmos-Predict  (NVIDIA)  -- the world model that is post-trained.
+  Cosmos-Policy / Cosmos-Predict  (NVIDIA).  The world model that is post-trained.
       The upstream experiment config carries an NVIDIA proprietary notice, so
       cluster/experiment_config_additions.py distributes only the block we append
       to it, with instructions for applying it. No upstream file is included.
-  Ctrl-World                                -- the video world model used on hardware.
-  LIBERO                                    -- simulator and demonstration suites.
-  RoboCasa                                  -- simulator and demonstration suites.
-  ManiSkill3                                -- simulator used by the early engine work.
-  DROID                                     -- robot control stack for the Franka arm.
+  Ctrl-World.  The video world model used on hardware.
+  LIBERO.  Simulator and demonstration suites.
+  RoboCasa.  Simulator and demonstration suites.
+  ManiSkill3.  Simulator used by the early engine work.
+  DROID.  Robot control stack for the Franka arm.
 
 Model weights and datasets are likewise not redistributed. See README.md for what
 needs to be downloaded and from where.

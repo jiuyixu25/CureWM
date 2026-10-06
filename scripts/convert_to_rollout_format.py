@@ -5,7 +5,7 @@ Official rollout format, verified against all_episodes/: one hdf5 per episode, w
         primary_images_jpeg (T,) vlen-uint8 | wrist_images_jpeg (T,) vlen-uint8
   attrs: success (bool), task_description (str)
 Filename: episode_data--suite=<suite>--<stamp>--task=<k>--ep=<n>--success=<Bool>--regen_demo.hdf5
-The dataloader reads attrs rather than the filename; the value target is the MC return and
+The dataloader reads attrs rather than the filename. The value target is the MC return and
 terminal is the success flag.
 
 Input: engine output carrying frames/wrist_frames.  Older batches have no

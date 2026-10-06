@@ -4,7 +4,7 @@ rollout samples.  Everything else in the recipe is untouched.
 Why: the default loss mask is all-ones and the official experiments never enable the
 per-sample-type masking, so a failed counterfactual rollout currently trains the policy head
 to imitate the failing action.  This flag lets the value/world-model frames learn from the
-failure while the policy head never sees it as a target.  Idempotent; backs up the file.
+failure while the policy head never sees it as a target.  Idempotent. Backs up the file.
 """
 import os
 import pathlib, shutil, re

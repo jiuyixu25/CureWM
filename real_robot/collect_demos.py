@@ -149,7 +149,7 @@ def main() -> None:
                       f"descent bump {np.linalg.norm(pinfo['descent_bump_xy_m'])*100:.1f} cm")
             job = {"kind": "demo", "name": f"{args.out_subdir}_{args.task_id}_{stamp}", "scene_id": s,
                    "serials": serials, "locks": locks}
-            # the scene changes by relocating ONLY the cube this episode lifts; the robot is holding it anyway
+            # the scene changes by relocating ONLY the cube this episode lifts. The robot is holding it anyway
             new_xy = relocate(cubes[target], [cubes[c] for c in colors if c != target]) if args.relocate else None
             status, note, saved = AC.episode(env, serials, cfg, cubes, target, job, base, rng, args, place_xy=new_xy)
             if saved is not None and pinfo is not None:      # sidecar note: which demos carry the perturbation

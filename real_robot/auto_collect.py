@@ -1,7 +1,7 @@
-"""Hands-off collection of cube counterfactual pairs (T1C) — the operator
+"""Hands-off collection of cube counterfactual pairs (T1C). The operator
 supervises quality, the script does the labelling and the scene reset.
 
-Task: `pick up the {red|green|blue} cube` — a pure grasp (lift and hold), the
+Task: `pick up the {red|green|blue} cube`, a pure grasp (lift and hold). The
 form the neighbouring Franka effort validated over 180 episodes. It buys three
 properties that make unattended running sound:
 
@@ -9,7 +9,7 @@ properties that make unattended running sound:
     fingers at ~0.70 where an empty close reads ~1.0 (threshold 0.88). A thin
     paper cup reads 0.97 against 1.00, which is why the cup task stayed manual;
   * the episode ends with the cube in the gripper, so the reset is "put it back
-    where it came from" — no search, no vision;
+    where it came from, with no search and no vision.
   * cube positions are known to the millimetre because the robot itself placed
     them (guided placement at the start, then autonomous shuffles).
 
@@ -21,8 +21,8 @@ pairs share a physically identical initial state rather than an approximate one:
     re-target to the far distractor    -> failure
     insufficient_grip on the target    -> failure (nothing lifted, no reset)
 
-Safety: every trajectory passes SafetyEnvelope; anything unexpected pauses for
-the human instead of guessing; two consecutive anomalies abort the run.
+Safety: every trajectory passes SafetyEnvelope. Anything unexpected pauses for
+the human instead of guessing, and two consecutive anomalies abort the run.
 
   python auto_collect.py --task-id T1C --scenes 12 --confirm
 """
@@ -45,8 +45,8 @@ from scripted_demo import HOVER_DZ, _record_tick, gen_trajectory  # noqa: E402
 
 HOME_XYZ = [0.31, 0.0, 0.49]
 TAIL_FRAMES = 20             # ~1.3 s of settled ending, uniform across episodes
-GRIP_HELD_MAX = 0.88         # a 2 cm cube reads ~0.70; an empty close reads ~1.0
-GRIP_HELD_MIN = 0.15         # fully open reads ~0.0 — "held" is a band, not a threshold
+GRIP_HELD_MAX = 0.88         # a 2 cm cube reads ~0.70. An empty close reads ~1.0
+GRIP_HELD_MIN = 0.15         # fully open reads ~0.0, so "held" is a band rather than a threshold
 HOLD_FRAC_MIN = 0.60
 MIN_SEP_M = 0.09             # keep cubes apart so "which one" is unambiguous
 PLACE_HOVER_DZ = 0.05        # low hover for guided placement: a precise visual guide
@@ -62,7 +62,7 @@ def grasp_z(cfg, xy=None):
     """Grasp height at (x, y), bilinear over the four taught corners.
 
     The corners of this rig differ by ~20 mm in z, which a single median would
-    spread as +/-10 mm of error — the entire tolerance of a 2 cm cube, and enough
+    spread as +/-10 mm of error, the entire tolerance of a 2 cm cube, and enough
     to drive the fingers into the table at the high corner. Interpolating keeps
     every sampled point at the height it was actually taught at.
     """
@@ -88,7 +88,7 @@ def workspace(cfg):
     xy = np.asarray([s[:2] for s in cfg["spots"]], float)
     lo, hi = xy.min(0) + INSET_M, xy.max(0) - INSET_M
     if np.any(hi <= lo):
-        raise SystemExit(f"[cal] the taught region is empty after a {INSET_M*100:.0f} cm inset -- re-teach the four corners")
+        raise SystemExit(f"[cal] the taught region is empty after a {INSET_M*100:.0f} cm inset. Re-teach the four corners")
     return lo, hi
 
 
@@ -99,7 +99,7 @@ def sample_positions(lo, hi, n, rng, tries=8000):
         if min(d) >= MIN_SEP_M:
             return p
     raise SystemExit(f"[cal] the inset {(hi-lo)[0]*100:.0f}x{(hi-lo)[1]*100:.0f} cm region cannot hold {n} cubes "
-                     f"{MIN_SEP_M*100:.0f} cm apart -- teach the four corners further out")
+                     f"{MIN_SEP_M*100:.0f} cm apart. Teach the four corners further out")
 
 
 # --------------------------------------------------------------------------
@@ -207,7 +207,7 @@ def move_cube(env, serials, src_xy, dst_xy, cfg, rng, speed):
 
 def place_all(env, serials, cfg, colors, cubes, lo, hi, rng):
     """Sample a fresh separated layout and let the operator place each cube under
-    the hovering gripper — positions stay known to the millimetre."""
+    the hovering gripper, so positions stay known to the millimetre."""
     pos = sample_positions(lo, hi, len(colors), rng)
     for i, c in enumerate(colors):
         cubes[c] = pos[i]
@@ -221,7 +221,7 @@ def place_all(env, serials, cfg, colors, cubes, lo, hi, rng):
 
 def place_guided(env, serials, xy, cfg, color):
     """Hover the open gripper over the sampled point so the operator can drop the
-    cube exactly there — the position is then known to the millimetre."""
+    cube exactly there, and the position is then known to the millimetre."""
     z_h = grasp_z(cfg, xy) + PLACE_HOVER_DZ
     hold = np.array([xy[0], xy[1], z_h, *cfg["rpy"], 0.0], float)
     stream(env, serials, np.repeat(hold[None, :], 20, axis=0))
@@ -229,7 +229,7 @@ def place_guided(env, serials, xy, cfg, color):
 
 
 def shuffle_cubes(env, serials, cfg, cubes, lo, hi, rng, speed):
-    """Robot re-arranges the scene itself; positions stay known from memory."""
+    """Robot re-arranges the scene itself. Positions stay known from memory."""
     for c in sorted(cubes, key=lambda _: rng.random()):
         others = [cubes[k] for k in cubes if k != c]
         p = None
@@ -385,7 +385,7 @@ def main():
                     print(f"\n[shuffle] scene {s+1}: the robot re-arranges the three cubes ...")
                     ok, why = shuffle_cubes(env, serials, cfg, cubes, lo, hi, rng, args.speed)
                     if not ok:
-                        print(f"[shuffle] failed: {why} -- stopping for the operator")
+                        print(f"[shuffle] failed: {why}. Stopping for the operator")
                         break
                 else:
                     print(f"\n[place] scene {s+1} layout: the gripper hovers in turn, you place the cubes")
@@ -413,7 +413,7 @@ def main():
                     streak += 1
                     log_session({"event": "auto_anomaly", "scene": s, "family": tag, "note": note})
                     if streak >= MAX_ANOMALIES:
-                        raise SystemExit(f"[auto] {streak} anomalies in a row -- stopping for the operator; "
+                        raise SystemExit(f"[auto] {streak} anomalies in a row. Stopping for the operator. "
                                          f"fix the scene and rerun this command, already-recorded episodes are skipped")
                 else:
                     streak = 0

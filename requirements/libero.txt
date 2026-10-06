@@ -1,4 +1,4 @@
 # LIBERO backend.  Install the LIBERO package from its own repository
-# (https://github.com/Lifelong-Robot-Learning/LIBERO); it pulls in robosuite and mujoco.
+# (https://github.com/Lifelong-Robot-Learning/LIBERO). It pulls in robosuite and mujoco.
 numpy>=1.24,<3
 h5py>=3.8

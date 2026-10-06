@@ -1,7 +1,7 @@
 """Physical pointer with a camera closed loop: close the gripper, lower the fingertips to ~1 cm
 above the table at a robot-frame (x, y), snapshot the external camera, and hold.  While holding,
-a JSON move file {"x":..,"y":..} re-targets the pointer (lift, move, descend, snapshot again);
-the hold file releases it (lift, home).  REMOVE THE PLATE FIRST.
+a JSON move file {"x":..,"y":..} re-targets the pointer (lift, move, descend, snapshot again).
+The hold file releases it (lift, home).  REMOVE THE PLATE FIRST.
 
     conda run -n robot python point_plate.py --x 0.53 --y 0.24 --out /tmp/point --hold-file /tmp/point/done
 Snapshots: <out>/snap_home.jpg (arm at home), <out>/snap_0.jpg, snap_1.jpg ... (arm pointing).
@@ -38,7 +38,7 @@ def touch_down(env, x, y, rpy, z_start, z_min=0.02, step=0.0006, err_thresh=0.00
 
 
 def snap(env, serials, path, tries=60):
-    """Save the external view; the D415 stream needs a moment after start-up/motion, so retry."""
+    """Save the external view. The D415 stream needs a moment after start-up/motion, so retry."""
     ext = None
     for _ in range(tries):
         _, ext = grab_views(env.get_observation(), serials)
@@ -100,14 +100,14 @@ def main():
         if args.touch:
             zc = touch_down(env, x, y, rpy, args.z)
             if zc is None:
-                print("[point] no contact down to z_min — holding at z_min + gap", flush=True); zc = 0.02
+                print("[point] no contact down to z_min, holding at z_min + gap", flush=True); zc = 0.02
             args.z = zc + args.gap
             _goto(env, [x, y, args.z], rpy, seconds=1.5, grip=1.0)
             time.sleep(1.0)
             st = np.asarray(env.get_state()[0]["cartesian_position"], float)
             print(f"[point] CONTACT at z={zc:.3f}; now holding {100*args.gap:.1f} cm above it: reached xyz=({st[0]:.3f},{st[1]:.3f},{st[2]:.3f})", flush=True)
         snap(env, serials, out / f"snap_{k}.jpg")
-        print(f"[point] FINGERTIPS at x={x:.3f} y={y:.3f} z={args.z:.3f} — waiting for move file {move_file} "
+        print(f"[point] FINGERTIPS at x={x:.3f} y={y:.3f} z={args.z:.3f}, waiting for move file {move_file} "
               f"or release file {args.hold_file}", flush=True)
         t0 = time.time()
         while time.time() - t0 < args.hold_timeout:

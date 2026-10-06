@@ -81,7 +81,7 @@ def main():
     try:
         viewer = TkViewer("cam_align  (q quit, s snapshot, e edges, b blend)")
     except Exception as e:  # noqa: BLE001
-        print(f"[align] no window ({type(e).__name__}) — writing {out}/live_blend.jpg twice a second; open it in eog")
+        print(f"[align] no window ({type(e).__name__}), writing {out}/live_blend.jpg twice a second; open it in eog")
     show_edges, show_blend, k, txt, ok, last_write = True, True, 0, "estimating...", False, 0.0
     try:
         while t_end is None or time.time() < t_end:

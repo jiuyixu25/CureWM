@@ -49,7 +49,7 @@ def assign(demos: list[Path], rng, n_families: int, severities_per_family) -> li
 
 
 def assign_fixed(demos: list[Path], rng, family: str, sevs) -> list[dict]:
-    """Every demo gets the same mechanical family — for the cube task that is
+    """Every demo gets the same mechanical family. For the cube task that is
     insufficient_grip, the only family whose object never leaves its spot (so the
     scene needs no reset) and the exact path-preserving contrast to wrong_target."""
     entries = []
@@ -63,7 +63,7 @@ def assign_fixed(demos: list[Path], rng, family: str, sevs) -> list[dict]:
 
 
 def assign_wrong_target(demos: list[Path], rng, spots) -> list[dict]:
-    """One entry per (demo, near/far distractor); ctx is frozen into the plan so
+    """One entry per (demo, near/far distractor). Ctx is frozen into the plan so
     the replay is fully specified and auditable."""
     entries = []
     for demo in demos:

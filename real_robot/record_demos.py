@@ -1,9 +1,9 @@
-"""CureWM-Real demo recorder — Quest-3 teleop, both D415s, CureWM episode format.
+"""CureWM-Real demo recorder. Quest-3 teleop, both D415s, CureWM episode format.
 
 Mirrors the proven loop of scripts/tests/collect_lerobot_dataset.py (grip-gated
 recording, tap-to-toggle gripper intent, post-success grace tail) but writes
-the CureWM episode layout (common.py) with per-frame JOINT positions — replay
-needs them to reset exactly — and locks AE/AWB before the first frame.
+the CureWM episode layout (common.py) with per-frame JOINT positions, which
+replay needs to reset exactly, and locks AE/AWB before the first frame.
 
 Quest bindings (right controller default):
     hold G  = enable robot + record        trigger tap = toggle gripper
@@ -34,7 +34,7 @@ TRIGGER_RISE, TRIGGER_FALL = 0.6, 0.3
 
 
 def reset_gripper_last(env):
-    """Home first, THEN open — env.reset() opens mid-air and drops held objects."""
+    """Home first, THEN open. env.reset() opens mid-air and drops held objects."""
     env._robot.update_joints(env.reset_joints, velocity=False, blocking=True)
     env._robot.update_gripper(0, velocity=False, blocking=True)
 
@@ -127,7 +127,7 @@ def record_episode(env, controller, serials, out_dir, meta, max_steps, grace_fra
                 print("[demo] A pressed before any teleop; ignoring")
             else:
                 grace_count = 0
-                print(f"[demo] success armed — {grace_frames} tail frames, hold steady")
+                print(f"[demo] success armed, {grace_frames} tail frames, hold steady")
         if len(buf) >= max_steps:
             path = buf.save()
             print(f"[demo] SAVED at max_steps ({len(buf)} frames)")

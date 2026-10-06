@@ -3,8 +3,8 @@
 A stub backend stands in for MuJoCo: it executes an action sequence against a toy model
 of a pick-and-place task where the object is dropped if the gripper opens while carrying,
 or if the grip command is too weak to hold it.  That is enough to exercise everything the
-engine is responsible for -- phase annotation, where each family is allowed to act, the
-severity parameterization, and the pairing protocol -- and to assert the property the
+engine is responsible for, namely phase annotation, where each family is allowed to act,
+the severity parameterization and the pairing protocol. It also asserts the property the
 paper calls Gate 1: a family's failure rate must rise with severity.
 
     python3 -m pytest tests/ -q          (or: python3 tests/test_engine.py)
@@ -44,7 +44,7 @@ def nominal_actions(T: int = 40) -> np.ndarray:
 
 
 class StubBackend:
-    """Toy pick-and-place. Holds the object while the grip command stays firm; the task
+    """Toy pick-and-place. Holds the object while the grip command stays firm. The task
     succeeds only if the object is still held when it arrives over the target."""
 
     def reset_to(self, init_state: dict) -> None:

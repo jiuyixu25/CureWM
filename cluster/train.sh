@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Post-training launcher for the Cosmos-Policy LIBERO arm.
 #
-# Every arm in the paper -- CureWM, the step-matched nominal control, the own-failure and
-# other-demonstration ablations -- is this same launcher with a different rollout mixture
-# in CUREWM_ROLLOUT_DIR.  Nothing else differs: same initialization, schedule, seed, batch
-# size and sampling ratios.
+# Every arm in the paper is this same launcher with a different rollout mixture in
+# CUREWM_ROLLOUT_DIR. That covers CureWM, the step-matched nominal control, and the
+# own-failure and other-demonstration ablations. Nothing else differs: they share the
+# initialization, schedule, seed, batch size and sampling ratios.
 #
 # Required:
 #   CUREWM_ROOT           working root holding third_party/ and train_output/

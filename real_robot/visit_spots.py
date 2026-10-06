@@ -1,10 +1,10 @@
 """Hover the gripper over each taught cup spot and the plate spot so the operator can re-mark
-the table — no recording, no grasping.  Use only if the 08-31 tape marks are gone.
+the table, with no recording and no grasping.  Use only if the 08-31 tape marks are gone.
 
     conda run -n robot python visit_spots.py --task-id T1 [--hover 0.05]
 
 Same stack rules as the recorders: restart_stack first (done here), one RobotEnv per launch.
-Keep a hand on the e-stop; the arm moves to each spot on <Enter>.
+Keep a hand on the e-stop. The arm moves to each spot on <Enter>.
 """
 from __future__ import annotations
 
@@ -51,10 +51,10 @@ def main():
                     break
             _goto(env, xyz, rpy, seconds=4.0)
             if args.hold_file is None:
-                input(f"[visit] hovering over {name} — mark the table, then <Enter> ")
+                input(f"[visit] hovering over {name}, mark the table, then <Enter> ")
             else:
                 import time as _t
-                print(f"[visit] HOVERING over {name} at {np.round(xyz, 3).tolist()} — waiting for {args.hold_file} "
+                print(f"[visit] HOVERING over {name} at {np.round(xyz, 3).tolist()}, waiting for {args.hold_file} "
                       f"(timeout {args.hold_timeout:.0f}s)", flush=True)
                 t0 = _t.time()
                 while not Path(args.hold_file).exists() and _t.time() - t0 < args.hold_timeout:

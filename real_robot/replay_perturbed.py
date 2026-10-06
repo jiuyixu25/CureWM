@@ -4,7 +4,7 @@ For each source demo, resets to the demo's recorded initial JOINT configuration,
 then streams the (optionally perturbed) absolute cartesian+gripper targets at
 15 Hz through RobotEnv(action_space="cartesian_position"), recording both
 cameras + full state each tick. The operator labels the physical outcome at
-episode end — that label is the ground truth of the whole experiment.
+episode end, and that label is the ground truth of the whole experiment.
 
 Modes:
   R0 gate      python replay_perturbed.py --episode <demo_dir> --nominal --repeat 3
@@ -13,9 +13,9 @@ Modes:
   batch        python replay_perturbed.py --plan plan.json          (resumable)
 
 Safety: xyz stays on the demo path by construction (gripper-only families) or
-changes orientation only (wrist_tilt <= 15 deg); a SafetyEnvelope additionally
+changes orientation only (wrist_tilt <= 15 deg). A SafetyEnvelope additionally
 clamps to the demo's bounding box and limits per-step jumps. Keep a hand on
-the e-stop; the operator confirms every replay before the arm moves.
+the e-stop, and the operator confirms every replay before the arm moves.
 """
 from __future__ import annotations
 
@@ -89,13 +89,13 @@ def run_replay(env, serials, demo_dir: Path, family: str, severity: float,
     print(f"[replay] (reference image: {demo_dir/'init_scene.jpg'})")
     if isinstance(spot, int) and not layout:
         # Show the operator the spot: open gripper hovers 10 cm above the taught grasp point of the
-        # source demo; the cup goes directly under the fingertips.  goto_start() re-homes afterwards.
+        # source demo. The cup goes directly under the fingertips.  goto_start() re-homes afterwards.
         try:
             cfg = json.load(open(DATA_ROOT / f"spots_{demo_meta['task_id']}.json"))
             sp, rpy = cfg["spots"][spot], np.asarray(cfg["rpy"], float)
             from scripted_demo import _goto
             _goto(env, [sp[0], sp[1], sp[2] + 0.10], rpy, seconds=3.0)
-            print(f"[replay] the gripper is hovering 10 cm above cup spot {spot+1} -- place the cup directly under the fingertips")
+            print(f"[replay] the gripper is hovering 10 cm above cup spot {spot+1}. Place the cup directly under the fingertips")
         except Exception as e:  # noqa: BLE001
             print(f"[replay] hover skipped: {e}")
     ans = input("[replay] place object, clear the arm path, <Enter>=go  s=skip  q=quit: ").strip()
@@ -141,7 +141,7 @@ def run_replay(env, serials, demo_dir: Path, family: str, severity: float,
 
     if envl.violations:
         print(f"[replay] WARNING: safety envelope clamped {envl.violations} commands "
-              "(should be 0 — inspect before trusting this episode)")
+              "(should be 0, inspect before trusting this episode)")
     if drops:
         print(f"[replay] {drops} dropped camera ticks")
 

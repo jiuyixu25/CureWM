@@ -8,15 +8,15 @@ For each failing counterfactual (o_{t0}, a-_{t0:t0+16}) and its nominal control
   3) get_future_state_prediction imagines the future frames and get_value_prediction
      returns the value.
 Metrics:
-  - value optimism: the distribution of V(o, a-) against V(o, a+); the fraction with
+  - value optimism: the distribution of V(o, a-) against V(o, a+). The fraction with
     V(o, a-) > 0.5 is the value-side hallucination rate.
   - visual optimism: compare the L2 distance from the imagined future third-person frame
     to the ground-truth nominal future against the distance to the ground-truth failure
-    future; the fraction that looks more like the successful world is the visual-side
+    future. The fraction that looks more like the successful world is the visual-side
     hallucination rate.
 Run from the cosmos-policy checkout, e.g.
   cd third_party/cosmos-policy && .venv/bin/python <path>/probe_optimism.py --limit 12
-Use a small --limit on the first run to check the API assumptions; the script introspects
+Use a small --limit on the first run to check the API assumptions. The script introspects
 the keys get_action returns and prints them.
 """
 from __future__ import annotations
@@ -54,7 +54,7 @@ def make_cfg() -> GenerateConfig:
         trained_with_image_aug=True, chunk_size=16, num_open_loop_steps=16,
         task_suite_name="libero_goal", randomize_seed=False, seed=195,
         deterministic=True, use_variance_scale=False,
-        flip_images=False,  # our frames are already upright; do not flip twice
+        flip_images=False,  # our frames are already upright. Do not flip twice
         ar_future_prediction=False, ar_value_prediction=False,
         num_denoising_steps_action=5, num_denoising_steps_future_state=1,
         num_denoising_steps_value=1, use_jpeg_compression=False,
@@ -196,7 +196,7 @@ def main():
             print(f"[probe] {r['name']} ERROR: {e}", flush=True)
             traceback.print_exc()
             if len(results) == 0:
-                break  # failing on the first item means the API assumptions are wrong; stop and fix
+                break  # failing on the first item means the API assumptions are wrong. Stop and fix
 
     (out / "probe_results.jsonl").write_text(
         "\n".join(json.dumps(x) for x in results), encoding="utf-8")

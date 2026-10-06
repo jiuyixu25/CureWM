@@ -7,11 +7,11 @@ after post-training.
 Conventions:
 - A LIBERO action is 7-dimensional OSC_POSE in [-1, 1]. Dimension 7 is the gripper and
   uses **+1 = close, -1 = open**, the opposite sign from ManiSkill. The engine's own
-  convention is grip in [0 closed, 1 open]; the conversion happens only at this file's
+  convention is grip in [0 closed, 1 open]. The conversion happens only at this file's
   boundary.
 - Contact is approximated by the gripper close command plus a fixed three-step settling
   delay. A general robosuite geom-contact query would need per-task object names, so this
-  conservative heuristic is used instead; revisit it if a family's severity curve looks
+  conservative heuristic is used instead. Revisit it if a family's severity curve looks
   wrong.
 - Environments are created lazily per task and cached, so sort demonstrations by task
   before feeding them to the engine.
@@ -120,8 +120,7 @@ def load_libero_demos(suite: str = "libero_goal", demos_per_task: int = 5,
                       max_tasks: int | None = None,
                       task_ids: list[int] | None = None) -> list[Trajectory]:
     """Read the official hdf5 at datasets/<suite>/<task>_demo.hdf5, taking the first N
-    demonstrations per task.  Each demonstration carries the full MuJoCo state sequence;
-    states[0] is the initial state the simulator can be reset to exactly.  An explicit
+    demonstrations per task.  Each demonstration carries the full MuJoCo state sequence. States[0] is the initial state the simulator can be reset to exactly.  An explicit
     task_ids takes precedence, which is how work is sharded across processes."""
     bench = benchmark.get_benchmark_dict()[suite]()
     root = Path(get_libero_path("datasets")) / suite

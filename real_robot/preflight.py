@@ -1,4 +1,4 @@
-"""CureWM-Real session preflight — read-only, never moves the robot.
+"""CureWM-Real session preflight. Read-only, never moves the robot.
 
 Checks: robot ping, NUC zerorpc port, both D415 serials, disk space, camera
 lock file, data-root writability. Run before every collection session:
@@ -89,7 +89,7 @@ def main():
             print(f"  · camlock {s}: exp={v['exposure']:.0f} gain={v['gain']:.0f} "
                   f"wb={v['white_balance']:.0f}")
     else:
-        print("  · no camera lock yet — first recorder run will create it "
+        print("  · no camera lock yet, first recorder run will create it "
               "(set final lighting BEFORE that run)")
 
     if SESSION_LOG.exists():

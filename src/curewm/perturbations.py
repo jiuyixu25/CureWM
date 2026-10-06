@@ -18,7 +18,7 @@ Design constraints:
 - All randomness goes through an explicit rng, so a given (demo, family, severity, seed)
   reproduces exactly.
 
-Importing this module gives the families and generate_pairs(); a backend and a demo loader
+Importing this module gives the families and generate_pairs(). A backend and a demo loader
 supply the rest.  generate_pairs writes <out_dir>/index.jsonl and <out_dir>/episodes/*.npz.
 """
 
@@ -116,7 +116,7 @@ class Perturbation(ABC):
     Strength increases with severity, and the grid actually used is SEVERITY_GRID, which
     starts at 0.2.  Severity 0 is not part of it: the unperturbed trajectory is obtained
     by replaying the demonstration itself, not by calling apply(.., 0.0), so no family is
-    required to be the exact identity there.  Five of the six are; carry_slip still emits
+    required to be the exact identity there.  Five of the six are. Carry_slip still emits
     one pulse because its pulse count floors at one.
     """
 
@@ -125,7 +125,7 @@ class Perturbation(ABC):
 
     @abstractmethod
     def apply(self, traj: Trajectory, severity: float, rng: np.random.Generator) -> np.ndarray:
-        """Return a perturbed copy of actions; never modify in place."""
+        """Return a perturbed copy of actions. Never modify in place."""
 
     def _mask(self, traj: Trajectory) -> np.ndarray:
         assert traj.phases is not None, "call annotate_phases first"
@@ -249,7 +249,7 @@ TASK_FAMILY_EXCLUDE: dict[str, set[str]] = {
 
 # Per-task severity scaling.  High-precision tasks such as peg insertion saturate across the
 # whole grid and lose the informative part of the dose-response curve.  The scale applies to
-# the applied strength only; the nominal severity is what gets recorded.
+# the applied strength only. The nominal severity is what gets recorded.
 TASK_SEVERITY_SCALE: dict[str, float] = {
     "PegInsertionSide-v1": 0.35,
 }

@@ -1,5 +1,5 @@
 # Probing a Cosmos-Policy checkpoint.  Install cosmos-policy from NVIDIA's release and use
-# the virtualenv it ships with; these are the extras the probe scripts import directly.
+# the virtualenv it ships with. These are the extras the probe scripts import directly.
 torch>=2.1
 h5py>=3.8
 loguru>=0.7

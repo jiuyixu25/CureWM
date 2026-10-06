@@ -24,6 +24,7 @@ episodes/
 # ...except the probe outputs the analysis scripts read, and the README's figure.
 !analysis/*.jsonl
 !docs/*.png
+!docs/*.jpg
 
 .DS_Store
 .ipynb_checkpoints/

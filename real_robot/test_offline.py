@@ -1,4 +1,4 @@
-"""Offline invariant tests for the CureWM-Real engine — no robot, no cameras.
+"""Offline invariant tests for the CureWM-Real engine. No robot, no cameras.
 
 Builds a synthetic demo (approach 30 / grasp 15 / carry 45 / place 15 frames),
 saves it in episode format, then checks every family x severity:
@@ -184,7 +184,7 @@ def main():
         shutil.rmtree(tmp)
 
     print(f"\n{checks[0]}/{checks[1]} checks passed"
-          + ("  — ALL GREEN" if checks[0] == checks[1] else "  — FAILURES ABOVE"))
+          + ("  ALL GREEN" if checks[0] == checks[1] else "  FAILURES ABOVE"))
     sys.exit(0 if checks[0] == checks[1] else 1)
 
 

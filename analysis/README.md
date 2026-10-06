@@ -2,7 +2,7 @@
 
 These are the probe outputs and the scripts that turn them into the reported numbers. They
 exist so the statistics can be checked without rerunning any training, and they are not
-needed to use CureWM — for that, start from the top-level README.
+needed to use CureWM. For that, start from the top-level README.
 
 ```bash
 python3 check.py        # runs all three scripts, compares 20 reported values, PASS/FAIL
@@ -20,7 +20,7 @@ Standard library only: no install, no GPU, no network, about ten seconds.
 
 `probe_<arm>fa_<shard>.jsonl` are the LIBERO probe outputs, one file per arm and evaluation
 shard. `<arm>` is the checkpoint probed: `pre` and `base` are the released checkpoint,
-`ctrl` the step-matched control, `post` CureWM. `<shard>` names the suite and split —
+`ctrl` the step-matched control, `post` CureWM. `<shard>` names the suite and the split.
 `ho_A`, `ho_B`, `ho2_A`, `ho2_B` are the four Goal held-out shards, and `spatial_*`,
 `object_*`, `10_*` the three transfer suites. `visual2_{ctrl,treat}.jsonl` are the
 Ctrl-World probe outputs.
@@ -50,5 +50,6 @@ insertion-ordered dictionaries or are sorted explicitly, and each bootstrap uses
 ## One rounding note
 
 The macro-average AUROC of the released checkpoint is exactly 0.4895. The paper's Table 1
-rounds half-up and prints `0.490`; Python's `%.3f` rounds half-to-even and prints `0.489`.
+rounds half-up and prints `0.490`, while Python's `%.3f` rounds half-to-even and prints
+`0.489`.
 The underlying value is the same. Nothing else in these tables sits on a rounding boundary.

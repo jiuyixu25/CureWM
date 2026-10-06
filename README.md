@@ -4,18 +4,18 @@
 <h3>Diagnosing and Repairing Failure Insensitivity in Robot World Models</h3>
 
 <p>
-  Jiuyi Xu<sup>1</sup> &nbsp;&nbsp;
-  Xiao Hu<sup>2</sup> &nbsp;&nbsp;
-  Meida Chen<sup>3</sup> &nbsp;&nbsp;
-  Peng Gao<sup>4</sup> &nbsp;&nbsp;
-  Yang Ye<sup>2</sup> &nbsp;&nbsp;
+  Jiuyi Xu<sup>1</sup>   
+  Xiao Hu<sup>2</sup>   
+  Meida Chen<sup>3</sup>   
+  Peng Gao<sup>4</sup>   
+  Yang Ye<sup>2</sup>   
   Yangming Shi<sup>1</sup>
 </p>
 
 <p>
-  <sup>1</sup>Colorado School of Mines &nbsp;&nbsp;&nbsp;
+  <sup>1</sup>Colorado School of Mines    
   <sup>2</sup>Northeastern University <br>
-  <sup>3</sup>Institute for Creative Technologies, University of Southern California &nbsp;&nbsp;&nbsp;
+  <sup>3</sup>Institute for Creative Technologies, University of Southern California    
   <sup>4</sup>North Carolina State University
 </p>
 
@@ -35,14 +35,21 @@ generate training data. All three uses assume the model turns pessimistic when a
 would fail. Across four released checkpoints from two architecture families, it often does
 not: failing actions keep high values and success-like futures.
 
-**CureWM repairs a released checkpoint with data alone** — no architecture change, no loss
-change. Take a successful demonstration, perturb its actions across a severity grid,
+**CureWM repairs a released checkpoint with data alone.** It changes no architecture and no
+loss. Take a successful demonstration, perturb its actions across a severity grid,
 **execute each variant and let the task decide the outcome**, then fine-tune on the
 verified failures and the surviving successes alongside the original data.
 
 The point is the contrast: the same starting context with two different actions and two
 different outcomes. A single action per context lets a model fit outcomes without ever
 learning what distinguishes a good action from a bad one.
+
+<div align="center">
+<img src="docs/phenomenon.png" width="88%" alt="From one starting context, the recorded action succeeds and a perturbed action fails under physical execution, yet the released model predicts a success-like future for the failing action.">
+<p><em>The problem. From one starting context, the recorded action succeeds and a perturbed
+action fails when actually executed, yet the released model predicts a success-like future
+for both.</em></p>
+</div>
 
 ## Install
 
@@ -51,7 +58,7 @@ git clone https://github.com/jiuyixu25/CureWM.git && cd CureWM
 pip install -e .          # the engine needs numpy and nothing else
 ```
 
-Check it works — no simulator, no GPU, about two seconds:
+Check it works. No simulator, no GPU, about two seconds:
 
 ```bash
 python3 tests/test_engine.py
@@ -67,7 +74,7 @@ PASS  test_randomness_is_reproducible
 PASS  test_strength_increases_with_severity
 ```
 
-Simulators and the world-model stack are separate installs; see [`requirements/`](requirements/).
+Simulators and the world-model stack are separate installs. See [`requirements/`](requirements/).
 
 ## Run it on your own setup
 
@@ -84,7 +91,7 @@ class SimBackend(Protocol):
 ```
 
 LIBERO and ManiSkill3 bindings ship in [`src/curewm/backends/`](src/curewm/backends). Use
-them as the template for your own simulator — each is about 130 lines, and most of that is
+them as the template for your own simulator. Each is about 130 lines, and most of that is
 converting between the simulator's gripper sign convention and the engine's
 (`grip in [0 closed, 1 open]`).
 
@@ -97,7 +104,7 @@ PYTHONPATH=src python3 scripts/generate_libero.py \
 
 Each demonstration produces one nominal replay plus one episode per
 *(family, severity, seed)* cell. Every episode is **executed and labelled by the task's own
-success predicate** — a perturbation is never assumed to fail, and the ones that survive
+success predicate**. A perturbation is never assumed to fail, and the ones that survive
 are kept as graded successful partners rather than discarded.
 
 ```python
@@ -109,7 +116,7 @@ report = sanity_report(index)     # failure rate must rise with severity, per fa
 
 `sanity_report` enforces the screening condition from the paper: a family enters training
 only if its empirical failure rate is non-decreasing in severity. A family that fails that
-check is miscalibrated for your task — rescale it in `TASK_SEVERITY_SCALE` rather than
+check is miscalibrated for your task. Rescale it in `TASK_SEVERITY_SCALE` rather than
 shipping it.
 
 ### 3. Convert to your model's training format
@@ -118,7 +125,7 @@ shipping it.
 python3 scripts/convert_to_rollout_format.py --src data/pairs --out data/rollout_cure
 ```
 
-Failures get zero value targets; surviving replays keep the original labelling rule. For
+Failures get zero value targets. Surviving replays keep the original labelling rule. For
 video-only models, supervision is the frames recorded during execution.
 
 ### 4. Post-train
@@ -130,9 +137,10 @@ export CUREWM_INIT_PT=/path/to/released_weights.pt
 bash cluster/train.sh
 ```
 
-Every arm in the paper is this same launcher with a different mixture — the step-matched
-control, the own-failure ablation, the other-demonstration ablation. Same initialization,
-schedule, seed, batch size and sampling ratios; only the data differs.
+Every arm in the paper is this same launcher with a different mixture. That covers the
+step-matched control, the own-failure ablation, and the other-demonstration ablation. All
+of them share the initialization, schedule, seed, batch size and sampling ratios. Only the
+data differs.
 
 ### 5. Measure what changed
 
@@ -156,13 +164,13 @@ Each acts only on the phases it targets, with strength set by a severity in
 | Family | Acts on | At severity `s` |
 |---|---|---|
 | `insufficient_grip`   | grasp, carry | grip command moved toward open by `0.9s`, capping closure at `1 - 0.9s` |
-| `premature_release`   | carry, place | release frame interpolated toward the start of the carry; at `s=1` it releases immediately |
+| `premature_release`   | carry, place | release frame interpolated toward the start of the carry, reaching immediate release at `s=1` |
 | `carry_slip`          | carry        | `max(1, round(3s))` brief open pulses of `0.5 + 0.5s`, plus lateral spikes |
 | `contact_oscillation` | grasp, carry | oscillation of amplitude `0.7s` about the contact axis |
 | `wrist_tilt`          | carry        | sustained tilt of `0.8s` on one wrist axis |
 | `approach_overshoot`  | approach     | the approach extended by `0.6s` along its own direction |
 
-Phases come from the gripper command and the recorded contact events; an ambiguous step is
+Phases come from the gripper command and the recorded contact events. An ambiguous step is
 labelled `OTHER` and no family touches it. The random seed deliberately **excludes
 severity**, so along one severity axis the pulse positions and axis choices are identical
 and the strength effect is not swamped by positional randomness.
@@ -175,25 +183,83 @@ an `apply(traj, severity, rng)`.
 [`real_robot/`](real_robot/) runs the same protocol on a Franka arm through
 [DROID](https://github.com/droid-dataset/droid): scripted demonstration collection,
 action-by-action replay, perturbation at a chosen severity, and outcome labelling from
-gripper telemetry with an operator veto. Everything is configured by environment variable;
-see [`real_robot/README.md`](real_robot/README.md).
+gripper telemetry with an operator veto. Everything is configured by environment variable.
+See [`real_robot/README.md`](real_robot/README.md).
+
+<div align="center">
+<img src="docs/hardware_tasks.jpg" width="92%" alt="Two hardware tasks. Each row shows the shared starting scene, a successful execution, and a failing execution produced by a perturbation.">
+<p><em>Two tasks, each row showing the shared starting scene, a successful execution, and a
+failing one. Top: cup pick-and-place, failing under insufficient grip. Bottom: red-cube
+picking, failing by taking a distractor. All frames are physical executions rather than
+model predictions.</em></p>
+</div>
+
+The cube task carries a semantic failure family that the cup task cannot express. Grasping
+the wrong object is a clean execution by every mechanical measure, so it separates failures
+the model could detect from motion alone from failures it has to read off the scene.
 
 ## Results
 
-Full tables and analysis are in the paper. Headline numbers:
+### LIBERO
 
-| | Released | Fine-tuned on official data | **CureWM** |
-|---|---|---|---|
-| LIBERO-Goal, value optimism on 484 held-out failures | 79.1% | 79.6% | **30.2%** |
-| LIBERO-Goal, success-failure value gap $\Delta_{\mathrm{SF}}$ | +0.002 | +0.003 | **+0.282** |
-| LIBERO mean over four suites, AUROC | 0.490 | 0.492 | **0.613** |
-| Franka cup task, optimism (second evaluation) | 15/15 | 12/15 | **4/15** |
+Four suites, four metrics, three arms. The baseline sees the same number of fine-tuning
+steps as CureWM and differs only in that its mixture carries no counterfactuals. Suite
+counts give failed and successful held-out replays. Treatment used Goal demonstrations
+only, so Spatial, Object and LIBERO-10 measure transfer.
 
-Closed-loop task success is preserved: averaged over the four LIBERO suites, 96.6% for
-CureWM against 96.8% for the step-matched control.
+| Suite | Model | Optimism ↓ | Δ<sub>SF</sub> ↑ | AUROC ↑ | False-pos. ↓ | Task success ↑ |
+|---|---|---|---|---|---|---|
+| **Goal**<br><sub>484 / 1196</sub> | Released | 79.13 | +0.002 | 0.497 | 30.5 | 98.4 |
+| | Baseline | 79.55 | +0.003 | 0.495 | 31.0 | 96.4 |
+| | **CureWM** | **30.17** | **+0.282** | **0.743** | 38.0 | 94.8 |
+| **Spatial**<br><sub>367 / 443</sub> | Released | 65.67 | -0.014 | 0.518 | 36.6 | 98.4 |
+| | Baseline | 64.03 | -0.011 | 0.522 | 36.3 | 95.6 |
+| | **CureWM** | **47.68** | **+0.081** | **0.629** | **35.0** | 96.2 |
+| **Object**<br><sub>286 / 524</sub> | Released | 54.55 | +0.004 | 0.464 | **57.4** | 99.8 |
+| | Baseline | 53.85 | +0.004 | 0.466 | **57.4** | 99.0 |
+| | **CureWM** | **37.41** | **+0.086** | **0.587** | 59.4 | 99.8 |
+| **LIBERO-10**<br><sub>359 / 331</sub> | Released | 2.51 | -0.001 | 0.479 | 99.7 | 98.0 |
+| | Baseline | 2.51 | -0.001 | 0.483 | **99.1** | 96.2 |
+| | **CureWM** | 2.51 | **+0.003** | **0.493** | 99.4 | 95.4 |
+| **Mean** | Released | 50.47 | -0.002 | 0.490 | 56.1 | 98.65 |
+| | Baseline | 49.99 | -0.001 | 0.492 | **56.0** | 96.80 |
+| | **CureWM** | **29.44** | **+0.113** | **0.613** | 58.0 | 96.55 |
 
-[`analysis/`](analysis/) contains the probe outputs behind these tables and the scripts
-that compute them, for anyone who wants to check the statistics rather than rerun the
+Two things are worth reading together. Optimism falls furthest on Goal, the suite the
+counterfactuals came from, and the gain shrinks with distance from it. On LIBERO-10 the
+value head already sits at its floor, which pins the two threshold metrics in every arm and
+leaves only the rank-based ones readable. Closed-loop task success is essentially
+unchanged against the step-matched control, 96.55 against 96.80 averaged over the suites.
+
+### Hardware, Franka Research 3
+
+Two independent evaluations of the cup pick-and-place task, 15 held-out counterfactual
+pairs each. The adapted model is the released checkpoint after the scene adaptation that
+every arm receives.
+
+| | Optimism ↓ | Pair ranking ↑ | Δ<sub>SF</sub> ↑ | AUROC ↑ |
+|---|---|---|---|---|
+| *First evaluation* | | | | |
+| Adapted | 13/15 | 80.0% | +0.077 | 0.75 |
+| Baseline | 15/15 | 66.7% | +0.066 | 0.65 |
+| **CureWM, model 1** | **6/15** | **100.0%** | **+0.251** | **0.95** |
+| **CureWM, model 2** | **6/15** | **100.0%** | **+0.271** | **1.00** |
+| *Second evaluation* | | | | |
+| Adapted | 15/15 | 93.3% | +0.05 | 0.75 |
+| Baseline | 12/15 | 66.7% | +0.06 | 0.70 |
+| **CureWM, model 1** | **4/15** | **100.0%** | **+0.19** | **0.97** |
+| **CureWM, model 2** | **6/15** | 93.3% | **+0.17** | **0.96** |
+
+<div align="center">
+<img src="docs/predicted_futures.jpg" width="92%" alt="Predicted futures for a failing cup-task action sequence. The adapted model keeps the cup in the gripper, while CureWM predicts the release that was actually recorded.">
+<p><em>What the models imagine for an action that fails. The adapted model keeps the cup in
+the gripper to the end of the horizon. CureWM predicts the release that was actually
+recorded.</em></p>
+</div>
+
+Full tables, ablations and the statistical treatment are in the paper.
+[`analysis/`](analysis/) carries the probe outputs behind these numbers and the scripts
+that compute them, for anyone who wants to check the statistics without rerunning the
 training.
 
 ## Repository layout
@@ -218,5 +284,5 @@ only the block we append to it, with instructions. See [`NOTICE`](NOTICE).
 
 ## License
 
-MIT, see [`LICENSE`](LICENSE). Third-party components keep their own licenses; see
+MIT, see [`LICENSE`](LICENSE). Third-party components keep their own licenses. See
 [`NOTICE`](NOTICE).
