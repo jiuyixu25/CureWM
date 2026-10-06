@@ -21,8 +21,9 @@ episodes/
 *.png
 *.jpg
 
-# ...except the probe outputs the analysis scripts ship with, which are inputs, not results.
+# ...except the probe outputs the analysis scripts read, and the README's figure.
 !analysis/*.jsonl
+!docs/*.png
 
 .DS_Store
 .ipynb_checkpoints/

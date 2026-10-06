@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "CureWM"
+abstract: >-
+  Execution-verified counterfactual replay for repairing failure insensitivity
+  in released robot world models.
+type: software
+license: MIT
+repository-code: "https://github.com/jiuyixu25/CureWM"
+authors:
+  - family-names: Xu
+    given-names: Jiuyi
+    affiliation: Colorado School of Mines
+  - family-names: Hu
+    given-names: Xiao
+    affiliation: Northeastern University
+  - family-names: Chen
+    given-names: Meida
+    affiliation: "Institute for Creative Technologies, University of Southern California"
+  - family-names: Gao
+    given-names: Peng
+    affiliation: North Carolina State University
+  - family-names: Ye
+    given-names: Yang
+    affiliation: Northeastern University
+  - family-names: Shi
+    given-names: Yangming
+    affiliation: Colorado School of Mines
+preferred-citation:
+  type: article
+  title: >-
+    World Models Dream of Success: Diagnosing and Repairing Failure
+    Insensitivity in Robot World Models
+  year: 2026
+  journal: "arXiv preprint"
+  authors:
+    - family-names: Xu
+      given-names: Jiuyi
+    - family-names: Hu
+      given-names: Xiao
+    - family-names: Chen
+      given-names: Meida
+    - family-names: Gao
+      given-names: Peng
+    - family-names: Ye
+      given-names: Yang
+    - family-names: Shi
+      given-names: Yangming
